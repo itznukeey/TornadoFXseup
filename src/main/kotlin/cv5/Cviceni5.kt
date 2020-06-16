@@ -2,8 +2,8 @@ package cv5
 
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.geometry.Pos
-import javafx.scene.control.TextField
 import javafx.scene.layout.HBox
+import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.util.converter.NumberStringConverter
 import tornadofx.*
@@ -22,13 +22,10 @@ class Application : App(MainView::class) {
 class MainView : View() {
 
     private val redProperty = SimpleDoubleProperty()
-    private var redTextField: TextField by singleAssign()
 
     private val blueProperty = SimpleDoubleProperty()
-    private val blueTextField: TextField by singleAssign()
 
     private val greenProperty = SimpleDoubleProperty()
-    private val greenTextField: TextField by singleAssign()
 
     override val root = borderpane {
         top = vbox {
@@ -38,6 +35,31 @@ class MainView : View() {
             createSlider(hbox(), greenProperty, "Green")
             createSlider(hbox(), blueProperty, "Blue")
         }
+
+        val vbox = vbox()
+        vbox.background = Color.color(
+            redProperty.value / 255,
+            greenProperty.value / 255,
+            blueProperty.value / 255
+        ).asBackground()
+
+        //edit unsafe ale w/e
+        redProperty.onChange {
+            vbox.background = Color.color(it / 255, greenProperty.value / 255, blueProperty.value / 255)
+                .asBackground()
+        }
+
+        greenProperty.onChange {
+            vbox.background = Color.color(redProperty.value / 255, it / 255, blueProperty.value / 255)
+                .asBackground()
+        }
+
+        blueProperty.onChange {
+            vbox.background = Color.color(redProperty.value / 255, greenProperty.value / 255, it / 255)
+                .asBackground()
+        }
+
+        center = vbox
     }
 
     private fun createSlider(layout: HBox, property: SimpleDoubleProperty, type: String) {
