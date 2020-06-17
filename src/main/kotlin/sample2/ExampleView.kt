@@ -18,7 +18,7 @@ class ExampleView : View("My View") {
         }
     }
 
-    private val cities = FXCollections.observableArrayList<String>(
+    private val cities = FXCollections.observableArrayList(
         "Pilsen", "Prague", "Paris", "NewYork", "LA", "London"
     )
 
